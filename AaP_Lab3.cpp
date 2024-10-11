@@ -112,17 +112,11 @@ double taylorSeries(double x, double epsilon, int& terms) {
 
 	return sum;
 }
-void Task2(int NUMBER_OF_PLACES_TO_STUDY_FUNCTION) {
-	double x, epsilon;
-
-	cout << "Enter X (0 < |x| < 1): ";
-	cin >> x;
-	cout << "Enter epsilon: ";
-	cin >> epsilon;
-
-	if (fabs(x) >= 1 || epsilon <= 0) {
+double* Task2(double x, double epsilon)
+{
+	if (fabs(x) >= 1 || epsilon <= 0 || epsilon >= 1) {
 		cout << "Wrong data" << endl;
-		return;
+		return 0;
 	}
 
 	double exact = f_Task2(x);
@@ -130,31 +124,64 @@ void Task2(int NUMBER_OF_PLACES_TO_STUDY_FUNCTION) {
 	double approx = taylorSeries(x, epsilon, terms);
 	double error = fabs(approx - exact);
 
-	cout << endl;
-	cout << "Y(x) : " << dye::green(exact) << endl;
-	cout << "S(x): " << dye::green(approx) << endl;
-	cout << "Error: " << dye::green(error) << endl;
+	double* arr = new double[3];
+	arr[0] = exact;
+	arr[1] = approx;
+	arr[2] = error;
+	return arr;
+
 }
 //
 int main()
 {
-	int userInput;
+	int userInput = 1;
+
+	cout << "Enter 1 for Task 1 || 2 for Task 2: ";
+	cin >> userInput;
+
 	int NUMBER_OF_PLACES_TO_STUDY_FUNCTION;
 	string s[3] = { "Trapezoidal","Simpson's ","Right-Triangle" };
 
-	cout << "Enter NUMBER_OF_PLACES_TO_STUDY_FUNCTION" << endl;
-	cin >> NUMBER_OF_PLACES_TO_STUDY_FUNCTION;
-	cout << "\n";
+	double x;
+	double epsilon;
 
-	double* task1_array = Task1(NUMBER_OF_PLACES_TO_STUDY_FUNCTION);
-	cout << dye::green("\nIntegration:\n");
-	cout << left << setw(30) << "Trapezoidal Rule: " << task1_array[NUMBER_OF_PLACES_TO_STUDY_FUNCTION] << endl;
-	cout << left << setw(30) << "Simpson's Rule: " << task1_array[NUMBER_OF_PLACES_TO_STUDY_FUNCTION + 1] << endl;
-	cout << left << setw(30) << "Right Riemann Sum: " << task1_array[NUMBER_OF_PLACES_TO_STUDY_FUNCTION + 2] << "\n\n";
+	switch (userInput)
+	{
+	case 1:
+	{
+		cout << "Enter NUMBER_OF_PLACES_TO_STUDY_FUNCTION" << endl;
+		cin >> NUMBER_OF_PLACES_TO_STUDY_FUNCTION;
+		cout << "\n";
+		double* task1_array = Task1(NUMBER_OF_PLACES_TO_STUDY_FUNCTION);
 
-	delete[] task1_array;
+		cout << dye::green("\nIntegration:\n");
+		cout << left << setw(30) << "Trapezoidal Rule: " << task1_array[NUMBER_OF_PLACES_TO_STUDY_FUNCTION] << endl;
+		cout << left << setw(30) << "Simpson's Rule: " << task1_array[NUMBER_OF_PLACES_TO_STUDY_FUNCTION + 1] << endl;
+		cout << left << setw(30) << "Right Riemann Sum: " << task1_array[NUMBER_OF_PLACES_TO_STUDY_FUNCTION + 2] << "\n\n";
 
+		delete[] task1_array;
+		break;
+	}
+	case 2:
+	{
+		cout << "enter x: ";
+		cin >> x;
+		cout << "Enter epsilon: ";
+		cin >> epsilon;
+		double* task2_array = Task2(x, epsilon);
+		cout << "\n";
+		cout << left << setw(20) << dye::green("Exact Value") << task2_array[0] << "\n";
+		cout << left << setw(20) << dye::green("Approximate Value") << task2_array[1] << "\n";
+		cout << left << setw(20) << dye::green("Error") << task2_array[2] << "\n";
 
+		delete[] task2_array;
+		break;
+	}
+	default:
+
+		cout << "wrong data\n";
+		break;
+	}
 
 	system("pause");
 	cout << "\n";
